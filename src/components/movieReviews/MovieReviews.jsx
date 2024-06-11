@@ -1,42 +1,42 @@
-import ReactModal from 'react-modal';
+import { getMovieReview } from '../../movies-API'
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import css from './MovieReviews.module.css'
 
-export default function ImageModal({ openModal, CloseModal, id }) {
-     ReactModal.setAppElement('#root')
-        return (
-                <>
-                <div>
-                    <ReactModal
-                        isOpen={openModal}
-                        onRequestClose={CloseModal}
-                        shouldCloseOnOverlayClick={true}
-                        shouldCloseOnEsc={true}
-                        style={{
-                            content: {
-                            top: '35%',
-                            left: '50%',
-                            transform: 'translate(-35%, -35%)',
-                            border: 'none',
-                            background: 'transparent',
-                            overflow: 'visible',
-                        },
-                        overlay: {
-                            position: 'fixed',
-                            top: 0,
-                            left: 0,
-                            backgroundColor: 'rgb(0, 0, 0, 0.5)',
-                        border: 'none'}
-                        }}
-                    >
-                        <img
-                                width='650'
+export default function MoviesReviews( ) {
+   const {movieId} = useParams()
+  const [reviews, setReviews]= useState([])
+  const [fetchError, setFetchError] = useState(false)
+ 
+  useEffect(()=>{
+    async function fetchMovieReviews(){
+      try {
+        const data = await getMovieReview(movieId);
+        setReviews(data.results);
+        console.log(data.results);
+      } catch (error) {
+        setFetchError(true);
+      }
+    }
+    fetchMovieReviews()
+  },[movieId])
 
-                                src={id}
-                                alt='img'
-                            />
-                    </ReactModal>     
-                        
-                    
-                </div> 
-                </>
-    );
+  return (
+      <ul className={css.reviewList}>
+        { fetchError ? 
+        <p>Reload the page</p>
+        :
+        (reviews.length>0 
+          ?
+          reviews.map(({author, content, id})=>
+          <li key={id} className={css.reviewItem}>
+            <p><strong>{author}</strong></p>
+            <p>{content}</p>
+          </li>)
+          :
+          (<p className={css.notFoundTitle}>No reviews found for this movie</p>)
+        )
+        }
+      </ul>
+  )
 }

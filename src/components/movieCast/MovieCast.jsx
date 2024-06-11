@@ -1,17 +1,48 @@
-import css from './ImageCard.module.css'
+import { useState, useEffect } from 'react'
+import { getMovieCredits } from '../../movies-API'
+import { useParams } from 'react-router-dom'
+import css from './MovieCast.module.css'
 
-export default function ImageCard({data: { id, alt_description, urls: { small } }, onClick, onId }) {
-    
-  return (<>
-            <div className={css.cotainer} >
-                  <img
-                    className={css.img}
-                    key={id}
-                    src={small} alt={alt_description}
-                    onClick={() => {
-                              onClick();
-                              onId(id)
-                        }}/>
-            </div>
-         </>)
+export default function MovieCast() {
+    const [cast, setCast] = useState([])
+  const {movieId} = useParams()
+  const [fetchError, setFetchError] = useState(false)
+
+  useEffect(()=>{
+    async function fetchMovieCredits(){
+      try {
+        const data = await getMovieCredits(movieId)
+        setCast(data.cast)
+      } catch (error) {
+        setFetchError(true)
+      }
+    }
+    fetchMovieCredits();
+  },
+  [movieId])
+
+  
+  return (
+    <ul className={css.castList}>
+      
+      {fetchError ? 
+      (<p>Reload the page</p>) : 
+
+      cast.map(({id, character, name, profile_path})=>
+        {
+          if(!profile_path){
+            return 
+          }
+          return(<li key={id} className={css.castItems}>
+            <img src={`https://image.tmdb.org/t/p/w200/${profile_path}`} alt={name} />
+            <p className={css.castName}>
+              <strong>{name}</strong>
+            </p>
+            <p>Character: {character}</p>
+          </li>)
+        }
+      )
+      }
+    </ul>
+  )
 }
