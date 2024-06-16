@@ -1,6 +1,7 @@
 import { Link, useParams, Outlet, useLocation } from 'react-router-dom'
 import { useEffect, useRef, useState, Suspense } from 'react'
 import { getMovieById } from '../../../movies-API'
+import css from './MovieDetailsPage.module.css'
 
 export default function MovieDetailsPage() {
     const { movieId } = useParams()

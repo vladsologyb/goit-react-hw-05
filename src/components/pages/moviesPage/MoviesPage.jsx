@@ -2,6 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 import { getMoviesByQuery } from '../../../movies-API';
 import { useEffect, useState } from 'react';
 import MovieList from '../../movieList/MovieList';
+import css from './MoviesPage.module.css'
 
 export default function MoviesPage() {
     const [movies, setMovies] = useState([]);

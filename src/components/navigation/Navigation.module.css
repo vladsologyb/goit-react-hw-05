@@ -1,15 +1,15 @@
-.searchField {
-  width: 100%;
-  height: 50px;
-  background-color: rgb(186, 186, 202);
+.nav {
+  margin-right: 30px;
+  color: black;
   padding: 10px;
-  margin: 0;
+  border-radius: 10%;
 }
 
-.input {
-  border: none;
-  margin-right: 5px;
-  border-radius: 5px;
-  width: 250px;
-  height: 30px;
+.activeNav {
+  background-color: rgb(229, 227, 233);
+  
+}
+
+.containerNav {
+  margin-bottom: 50px;
 }
